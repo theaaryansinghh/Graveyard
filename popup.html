@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobTracker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:       #0d0d0f;
+    --surface:  #18181c;
+    --border:   #2a2a32;
+    --text:     #e8e8f0;
+    --muted:    #6b6b80;
+    --accent:   #7c6bff;
+    --green:    #22c55e;
+    --red:      #f43f5e;
+    --amber:    #f59e0b;
+    --blue:     #38bdf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 380px;
+    min-height: 480px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-icon {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .logo-text {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  .logo-text span { color: var(--accent); }
+
+  .header-actions { display: flex; gap: 6px; }
+  .btn-icon {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .btn-icon:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Proxy warning ── */
+  .proxy-warn {
+    margin: 12px 16px;
+    padding: 10px 12px;
+    background: #1a1208;
+    border: 1px solid #78350f;
+    border-radius: 8px;
+    font-size: 11.5px;
+    color: var(--amber);
+    line-height: 1.5;
+    display: none;
+  }
+  .proxy-warn a { color: var(--amber); }
+
+  /* ── Stats grid ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 16px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    transition: border-color .15s;
+    cursor: pointer;
+  }
+  .stat:hover { border-color: var(--accent); }
+  .stat.active { border-color: var(--accent); background: #1a1830; }
+  .stat-count {
+    font-size: 22px;
+    font-weight: 800;
+    font-family: 'DM Mono', monospace;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 9.5px; color: var(--muted); font-weight: 600; letter-spacing: .4px; text-transform: uppercase; }
+
+  .stat.total   .stat-count { color: var(--text); }
+  .stat.rejected .stat-count { color: var(--red); }
+  .stat.interview .stat-count { color: var(--blue); }
+  .stat.offer   .stat-count { color: var(--green); }
+
+  /* ── Section header ── */
+  .section-header {
+    padding: 0 16px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--muted);
+  }
+  .filter-pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+  }
+  .filter-pill.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #1a1830;
+  }
+
+  /* ── Email list ── */
+  .email-list {
+    padding: 0 16px;
+    max-height: 240px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .email-list::-webkit-scrollbar { width: 3px; }
+  .email-list::-webkit-scrollbar-track { background: transparent; }
+  .email-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+  .email-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn .2s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-rejected  { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .dot-interview { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+  .dot-offer     { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .dot-ack       { background: var(--muted); }
+  .dot-unknown   { background: var(--border); }
+
+  .email-info { flex: 1; min-width: 0; }
+  .email-company {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .email-subject {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+  }
+
+  .email-meta { text-align: right; flex-shrink: 0; }
+  .email-date { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .status-chip {
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 3px;
+    display: inline-block;
+  }
+  .chip-rejected  { background: #2d0a12; color: var(--red); }
+  .chip-interview { background: #0c1f2d; color: var(--blue); }
+  .chip-offer     { background: #071f14; color: var(--green); }
+  .chip-ack       { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+  .chip-unknown   { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+
+  /* ── Empty state ── */
+  .empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .empty-icon { font-size: 32px; margin-bottom: 10px; }
+  .empty-text { font-size: 13px; line-height: 1.5; }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .btn {
+    flex: 1;
+    padding: 9px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #6a5aff; }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Settings panel ── */
+  #settings-panel {
+    display: none;
+    padding: 16px;
+    animation: slideIn .2s ease;
+  }
+  .field { margin-bottom: 12px; }
+  .field label {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .field input {
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .field input:focus { border-color: var(--accent); }
+  .field input::placeholder { color: var(--muted); }
+
+  .field-row { display: flex; gap: 8px; }
+  .field-row .field { flex: 1; }
+
+  .save-msg {
+    font-size: 11px;
+    color: var(--green);
+    text-align: center;
+    margin-top: 4px;
+    height: 14px;
+  }
+
+  .scanning {
+    opacity: .6;
+    pointer-events: none;
+  }
+  .spin { animation: spin 1s linear infinite; display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">📬</div>
+    <div class="logo-text">Job<span>Tracker</span></div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-icon" id="settings-btn" title="Settings">⚙️</button>
+    <button class="btn-icon" id="export-btn" title="Export CSV">⬇️</button>
+  </div>
+</div>
+
+<div class="proxy-warn" id="proxy-warn">
+  ⚠️ Local proxy not detected. Start it with <code>node proxy/server.js</code> in the extension folder, then scan again.
+</div>
+
+<!-- ── Dashboard ── -->
+<div id="dashboard">
+  <div class="stats">
+    <div class="stat total" data-filter="all">
+      <div class="stat-count" id="count-total">0</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat rejected" data-filter="rejected">
+      <div class="stat-count" id="count-rejected">0</div>
+      <div class="stat-label">Rejected</div>
+    </div>
+    <div class="stat interview" data-filter="interview">
+      <div class="stat-count" id="count-interview">0</div>
+      <div class="stat-label">Interview</div>
+    </div>
+    <div class="stat offer" data-filter="offer">
+      <div class="stat-count" id="count-offer">0</div>
+      <div class="stat-label">Offer</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title" id="list-label">Recent Emails</span>
+  </div>
+
+  <div class="email-list" id="email-list">
+    <div class="empty">
+      <div class="empty-icon">📭</div>
+      <div class="empty-text">No job emails tracked yet.<br>Hit <strong>Scan Now</strong> to start.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button class="btn btn-secondary" id="clear-btn">Clear All</button>
+    <button class="btn btn-primary" id="scan-btn">Scan Now</button>
+  </div>
+</div>
+
+<!-- ── Settings ── -->
+<div id="settings-panel">
+  <div class="field">
+    <label>IMAP Host</label>
+    <input type="text" id="cfg-host" placeholder="imap.gmail.com" />
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label>Port</label>
+      <input type="number" id="cfg-port" placeholder="993" value="993" />
+    </div>
+    <div class="field">
+      <label>TLS</label>
+      <input type="text" id="cfg-tls" placeholder="yes" value="yes" />
+    </div>
+  </div>
+  <div class="field">
+    <label>Email Address</label>
+    <input type="email" id="cfg-user" placeholder="you@gmail.com" />
+  </div>
+  <div class="field">
+    <label>Password / App Password</label>
+    <input type="password" id="cfg-pass" placeholder="••••••••••••" />
+  </div>
+  <div class="save-msg" id="save-msg"></div>
+  <div class="footer" style="margin-top:8px; padding: 0;">
+    <button class="btn btn-secondary" id="cancel-settings">Cancel</button>
+    <button class="btn btn-primary" id="save-settings">Save Config</button>
+  </div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

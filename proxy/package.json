@@ -1,0 +1,17 @@
+{
+  "name": "jobtracker-proxy",
+  "version": "1.0.0",
+  "description": "Local IMAP bridge for the JobTracker browser extension",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "imap": "^0.8.19",
+    "mailparser": "^3.7.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "JobTracker — Application Reply Monitor",
+  "version": "1.0.0",
+  "description": "Automatically scans your inbox for job/internship replies and tracks them in one place. No more opening 10 rejection emails one by one.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "notifications",
+    "downloads"
+  ],
+  "host_permissions": [],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_badge_background_color": "#6366f1"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
