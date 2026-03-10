@@ -332,6 +332,12 @@
 </head>
 <body>
 
+<script>
+  chrome.storage.local.get('graveyard_theme', d => {
+    if (d.graveyard_theme === 'light') window.location.replace('popup2.html');
+  });
+</script>
+
 <div class="header">
   <div class="logo-block">
     <div class="logo-title">Graveyard</div>
@@ -416,6 +422,11 @@
     <label>App Password</label>
     <input type="password" id="cfg-pass" placeholder="••••••••••••••••" />
   </div>
+  <div class="theme-toggle" style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-size:10px; color:var(--dead); letter-spacing:1px; text-transform:uppercase;">Theme</span>
+    <button id="theme-switch-btn" style="font-size:10px; padding:3px 10px; border-radius:3px; border:1px solid var(--border); background:transparent; color:var(--epitaph); cursor:pointer; font-family:'Courier Prime',monospace; letter-spacing:1px;">Light →</button>
+  </div>
+
   <div class="save-msg" id="save-msg"></div>
   <div class="footer" style="margin-top:8px; padding:0;">
     <button class="btn btn-secondary" id="cancel-settings">Cancel</button>
