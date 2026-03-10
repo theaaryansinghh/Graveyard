@@ -16,7 +16,7 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create(POLL_ALARM, {
     periodInMinutes: POLL_MINUTES
   });
-  console.log('[JobTracker] Installed. Polling every', POLL_MINUTES, 'min.');
+  console.log('[Graveyard] Installed. Polling every', POLL_MINUTES, 'min.');
 });
 
 chrome.alarms.onAlarm.addListener(alarm => {
@@ -55,13 +55,13 @@ chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
 async function runScan() {
   const config = await getConfig();
   if (!config?.host || !config?.user || !config?.pass) {
-    console.warn('[JobTracker] No IMAP config set — skipping scan.');
+    console.warn('[Graveyard] No IMAP config set — skipping scan.');
     return;
   }
 
   const proxyUp = await IMAP.isProxyRunning();
   if (!proxyUp) {
-    console.warn('[JobTracker] Local proxy not running at', IMAP.PROXY_URL);
+    console.warn('[Graveyard] Local proxy not running at', IMAP.PROXY_URL);
     setBadge('!', '#ef4444');
     return;
   }
@@ -78,7 +78,7 @@ async function runScan() {
       limit: 200
     });
 
-    console.log(`[JobTracker] Fetched ${emails.length} emails.`);
+    console.log(`[Graveyard] Fetched ${emails.length} emails.`);
 
     const existing = await getApps();
     const existingIds = new Set(existing.map(a => a.id));
@@ -109,14 +109,14 @@ async function runScan() {
       await saveApps(all);
       updateBadge(all);
       notifyNewResults(newApps);
-      console.log(`[JobTracker] Saved ${newApps.length} new job emails.`);
+      console.log(`[Graveyard] Saved ${newApps.length} new job emails.`);
     }
 
     // Save last scan time
     await saveConfig({ ...config, lastScan: new Date().toISOString() });
 
   } catch (err) {
-    console.error('[JobTracker] Scan error:', err);
+    console.error('[Graveyard] Scan error:', err);
     setBadge('!', '#ef4444');
   } finally {
     if (sessionId) await IMAP.disconnect(sessionId);
@@ -174,7 +174,7 @@ function notifyNewResults(newApps) {
   const offers     = newApps.filter(a => a.status === 'offer');
   const rejections = newApps.filter(a => a.status === 'rejected');
 
-  let title = '📬 JobTracker Update';
+  let title = '🪦 Graveyard Update';
   let message = '';
 
   if (offers.length)     message += `🎉 ${offers.length} offer(s)! `;

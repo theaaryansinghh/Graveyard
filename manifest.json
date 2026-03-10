@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "JobTracker — Application Reply Monitor",
+  "name": "Graveyard",
   "version": "1.0.0",
-  "description": "Automatically scans your inbox for job/internship replies and tracks them in one place. No more opening 10 rejection emails one by one.",
+  "description": "Automatically scans your inbox for job/internship replies and tracks them in one place.",
   "permissions": [
     "storage",
     "alarms",
