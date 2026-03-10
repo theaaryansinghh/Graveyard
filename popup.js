@@ -1,7 +1,3 @@
-// ─────────────────────────────────────────────
-//  JobTracker — popup.js
-// ─────────────────────────────────────────────
-
 const CONFIG_KEY = 'jobtracker_config';
 let allApps = [];
 let activeFilter = 'all';
@@ -14,7 +10,9 @@ const STATUS_LABELS = {
   unknown:   'Unknown'
 };
 
-// ── Init ─────────────────────────────────────
+
+
+//page loads everything from here
 document.addEventListener('DOMContentLoaded', async () => {
   await loadApps();
   await checkProxy();
@@ -22,13 +20,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   bindEvents();
 });
 
-// ── Load + render apps ───────────────────────
+
+//getting all emails saved and sorting by date
 async function loadApps() {
   const res = await msg({ type: 'GET_APPS' });
   allApps = (res.apps || []).sort((a, b) => new Date(b.date) - new Date(a.date));
   renderStats();
   renderList();
 }
+
+
 
 function renderStats() {
   const counts = {
@@ -37,14 +38,19 @@ function renderStats() {
     interview: allApps.filter(a => a.status === 'interview').length,
     offer:     allApps.filter(a => a.status === 'offer').length,
   };
+
   document.getElementById('count-total').textContent    = counts.total;
   document.getElementById('count-rejected').textContent = counts.rejected;
   document.getElementById('count-interview').textContent = counts.interview;
   document.getElementById('count-offer').textContent    = counts.offer;
 }
 
+
+
+//this renders the emails list depending on filter selected
 function renderList(filter) {
   if (filter !== undefined) activeFilter = filter;
+
   const list = document.getElementById('email-list');
   const label = document.getElementById('list-label');
 
@@ -55,10 +61,10 @@ function renderList(filter) {
   const filterNames = { all: 'All Emails', rejected: 'Rejections', interview: 'Interviews', offer: 'Offers' };
   label.textContent = filterNames[activeFilter] || 'Emails';
 
-  // Update stat card active states
   document.querySelectorAll('.stat').forEach(el => {
     el.classList.toggle('active', el.dataset.filter === activeFilter);
   });
+
 
   if (filtered.length === 0) {
     list.innerHTML = `
@@ -71,6 +77,7 @@ function renderList(filter) {
       </div>`;
     return;
   }
+
 
   list.innerHTML = filtered.map(app => `
     <div class="email-card">
@@ -87,24 +94,32 @@ function renderList(filter) {
   `).join('');
 }
 
-// ── Proxy check ──────────────────────────────
+
+
+//checking if proxy server is running or not
 async function checkProxy() {
   const { running } = await msg({ type: 'CHECK_PROXY' });
   document.getElementById('proxy-warn').style.display = running ? 'none' : 'block';
 }
 
-// ── Settings ─────────────────────────────────
+
+
+
+//loading saved imap config from storage
 function loadConfig() {
   chrome.storage.local.get(CONFIG_KEY, data => {
     const cfg = data[CONFIG_KEY] || {};
+
     document.getElementById('cfg-host').value = cfg.host || '';
     document.getElementById('cfg-port').value = cfg.port || 993;
     document.getElementById('cfg-tls').value  = cfg.tls !== false ? 'yes' : 'no';
     document.getElementById('cfg-user').value = cfg.user || '';
-    // Never pre-fill password for security
   });
 }
 
+
+
+//saving config user entered
 function saveConfig() {
   const config = {
     host: document.getElementById('cfg-host').value.trim(),
@@ -113,15 +128,19 @@ function saveConfig() {
     user: document.getElementById('cfg-user').value.trim(),
     pass: document.getElementById('cfg-pass').value,
   };
+
   if (!config.host || !config.user || !config.pass) {
     showSaveMsg('Please fill in all fields.', true);
     return;
   }
+
   chrome.storage.local.set({ [CONFIG_KEY]: config }, () => {
     showSaveMsg('Saved! ✓');
     setTimeout(toggleSettings, 800);
   });
 }
+
+
 
 function showSaveMsg(text, isError = false) {
   const el = document.getElementById('save-msg');
@@ -129,17 +148,26 @@ function showSaveMsg(text, isError = false) {
   el.style.color = isError ? 'var(--red)' : 'var(--green)';
 }
 
+
+
+//switch between dashboard and settings panel
 function toggleSettings() {
   const dash = document.getElementById('dashboard');
   const panel = document.getElementById('settings-panel');
+
   const isOpen = panel.style.display === 'block';
+
   dash.style.display  = isOpen ? 'block' : 'none';
   panel.style.display = isOpen ? 'none'  : 'block';
 }
 
-// ── Scan ─────────────────────────────────────
+
+
+
+//manual scan button logic
 async function scanNow() {
   const btn = document.getElementById('scan-btn');
+
   btn.innerHTML = '<span class="spin">↻</span> Scanning…';
   btn.disabled = true;
 
@@ -151,13 +179,20 @@ async function scanNow() {
   btn.disabled = false;
 }
 
-// ── Events ───────────────────────────────────
+
+
+
+//binding all button clicks here
 function bindEvents() {
+
   document.getElementById('scan-btn').addEventListener('click', scanNow);
   document.getElementById('settings-btn').addEventListener('click', toggleSettings);
   document.getElementById('cancel-settings').addEventListener('click', toggleSettings);
   document.getElementById('save-settings').addEventListener('click', saveConfig);
+
   document.getElementById('export-btn').addEventListener('click', () => msg({ type: 'EXPORT_CSV' }));
+
+
   document.getElementById('clear-btn').addEventListener('click', async () => {
     if (confirm('Clear all tracked emails?')) {
       await msg({ type: 'CLEAR_APPS' });
@@ -167,28 +202,42 @@ function bindEvents() {
     }
   });
 
-  // Stat card filters
+
   document.querySelectorAll('.stat').forEach(el => {
     el.addEventListener('click', () => renderList(el.dataset.filter));
   });
 }
 
-// ── Helpers ──────────────────────────────────
+
+
+
+//small helper to send message to background
 function msg(payload) {
   return new Promise(resolve => chrome.runtime.sendMessage(payload, resolve));
 }
 
+
+
+//escaping html so subject/company dont break layout
 function esc(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+
+
+//formatting email date nicer for ui
 function formatDate(dateStr) {
+
   if (!dateStr) return '—';
+
   const d = new Date(dateStr);
   const now = new Date();
+
   const diffDays = Math.floor((now - d) / 86400000);
+
   if (diffDays === 0) return 'Today';
   if (diffDays === 1) return 'Yesterday';
   if (diffDays < 7)  return `${diffDays}d ago`;
+
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
