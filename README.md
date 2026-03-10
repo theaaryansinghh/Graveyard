@@ -27,8 +27,11 @@ cd proxy && npm install && node server.js
 | Yahoo | `imap.mail.yahoo.com` | 993 |
 | Fastmail | `imap.fastmail.com` | 993 |
 
-Gmail requires an [App Password](https://myaccount.google.com/apppasswords) — your real password won't work.
-
+**Passwords:**
+- **Gmail** — requires an [App Password](https://myaccount.google.com/apppasswords), real password won't work
+- **Yahoo** — also requires an [App Password](https://login.yahoo.com/account/security), same deal
+- **Outlook** — regular password works, unless you have 2FA enabled (then generate one [here](https://account.microsoft.com/security))
+- **Fastmail** — regular password works
 ---
 
 ## Troubleshooting
