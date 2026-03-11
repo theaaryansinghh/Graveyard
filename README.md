@@ -4,7 +4,7 @@
 
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-222?style=flat-square) ![License](https://img.shields.io/badge/License-MIT-222?style=flat-square) ![IMAP](https://img.shields.io/badge/Email-IMAP-222?style=flat-square)
 
-A Chrome extension that scans your inbox for job application replies, classifies them (buried / alive / risen), and shows them in one place. Exports to CSV. Runs fully offline — nothing leaves your machine.
+A Chrome extension that scans your inbox for job application replies, classifies them (buried / alive / risen), and shows them in one place. Exports to CSV. Runs fully offline, nothing leaves your machine.
 
 ---
 
