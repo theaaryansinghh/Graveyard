@@ -27,4 +27,4 @@ Fork, branch, change, test, PR. Keep the description short. Don't add dependenci
 
 ## Reporting a bug
 
-Open an issue with what happened, your email provider, and any errors from the proxy terminal or popup DevTools console.
+Open an issue at [github.com/theaaryansinghh/Graveyard/issues](https://github.com/theaaryansinghh/Graveyard/issues) with what happened, your email provider, and any errors from the proxy terminal or popup DevTools console.
