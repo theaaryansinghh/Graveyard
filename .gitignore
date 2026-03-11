@@ -3,3 +3,4 @@ node_modules/
 proxy/node_modules/
 *.log
 .env
+.idea/
