@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Graveyard",
-  "version": "0.1.0-alpha",
-  "description": "Automatically scans your inbox for job/internship replies and tracks them in one place.",
+  "version": "1.0.0",
+  "description": "Scans your inbox and tracks job application replies so you can face the rejections all at once, not one by one.",
   "permissions": [
     "storage",
     "alarms",
@@ -20,7 +20,7 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_badge_background_color": "#6366f1"
+    "default_badge_background_color": "#1a1a1a"
   },
   "icons": {
     "16": "icons/icon16.png",
