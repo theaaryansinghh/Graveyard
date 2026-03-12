@@ -8,20 +8,20 @@
   @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap');
 
   :root {
-    --bg:       #f5f5f4;
+    --bg:       #faf9f7;
     --surface:  #ffffff;
-    --border:   #e5e5e3;
-    --border2:  #d4d4d0;
-    --text:     #1c1c1a;
-    --muted:    #78786e;
-    --faint:    #a8a89e;
-    --red:      #dc2626;
-    --red-bg:   #fef2f2;
-    --green:    #16a34a;
-    --green-bg: #f0fdf4;
-    --blue:     #2563eb;
-    --blue-bg:  #eff6ff;
-    --gray-bg:  #f9f9f8;
+    --border:   #eeece8;
+    --border2:  #e0ddd8;
+    --text:     #2d2b28;
+    --muted:    #8c8880;
+    --faint:    #b8b4ae;
+    --red:      #b85450;
+    --red-bg:   #fdf5f5;
+    --green:    #4a8c6a;
+    --green-bg: #f2faf6;
+    --blue:     #4a7ab5;
+    --blue-bg:  #f0f5fc;
+    --gray-bg:  #f7f6f4;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,7 +35,6 @@
     font-size: 13px;
   }
 
-  /* ── Header ── */
   .header {
     padding: 16px 18px 14px;
     background: var(--surface);
@@ -45,22 +44,13 @@
     justify-content: space-between;
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .logo-mark {
-    font-size: 16px;
-    line-height: 1;
-  }
-
+  .logo { display: flex; align-items: center; gap: 8px; }
+  .logo-mark { font-size: 15px; line-height: 1; opacity: 0.7; }
   .logo-name {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text);
-    letter-spacing: -0.3px;
+    letter-spacing: -0.2px;
   }
 
   .header-actions { display: flex; gap: 5px; }
@@ -69,36 +59,43 @@
     width: 28px; height: 28px;
     border-radius: 6px;
     border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
+    background: transparent;
+    color: var(--faint);
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     display: flex; align-items: center; justify-content: center;
     transition: all .15s;
   }
-  .btn-icon:hover {
-    background: var(--bg);
-    border-color: var(--border2);
-    color: var(--text);
-  }
+  .btn-icon:hover { background: var(--bg); border-color: var(--border2); color: var(--muted); }
 
-  /* ── Proxy warning ── */
+  /* export btn override */
+  #export-btn {
+    font-size: 10px;
+    font-weight: 500;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+    width: auto;
+    padding: 0 10px;
+    color: var(--muted);
+    gap: 4px;
+  }
+  #export-btn:hover { color: var(--text); }
+
   .proxy-warn {
     margin: 10px 14px;
     padding: 8px 12px;
-    background: #fffbeb;
-    border: 1px solid #fcd34d;
+    background: #fffdf0;
+    border: 1px solid #f0e0a0;
     border-radius: 6px;
     font-size: 11px;
-    color: #92400e;
+    color: #8a6a20;
     display: none;
   }
 
-  /* ── Stats ── */
   .stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    gap: 7px;
     padding: 14px;
   }
 
@@ -106,58 +103,53 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 10px 8px;
+    padding: 10px 6px;
     text-align: center;
     cursor: pointer;
     transition: all .15s;
   }
 
-  .stat:hover { border-color: var(--border2); }
-
+  .stat:hover { border-color: var(--border2); background: var(--gray-bg); }
   .stat.active { border-color: transparent; }
-  .stat.total.active    { background: var(--gray-bg); border-color: var(--border2); }
-  .stat.rejected.active { background: var(--red-bg);   border-color: #fca5a5; }
-  .stat.interview.active{ background: var(--blue-bg);  border-color: #93c5fd; }
-  .stat.offer.active    { background: var(--green-bg); border-color: #86efac; }
+  .stat.total.active     { background: var(--gray-bg);  border-color: var(--border2); }
+  .stat.rejected.active  { background: var(--red-bg);   border-color: #e8b8b5; }
+  .stat.interview.active { background: var(--blue-bg);  border-color: #b8d0e8; }
+  .stat.offer.active     { background: var(--green-bg); border-color: #a8d0b8; }
 
   .stat-count {
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1;
     margin-bottom: 4px;
     letter-spacing: -0.5px;
   }
 
   .stat-label {
-    font-size: 9.5px;
+    font-size: 9px;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
     color: var(--faint);
   }
 
   .stat.total    .stat-count { color: var(--text); }
   .stat.rejected .stat-count { color: var(--red); }
-  .stat.interview .stat-count{ color: var(--blue); }
+  .stat.interview .stat-count { color: var(--blue); }
   .stat.offer    .stat-count { color: var(--green); }
 
-  /* ── Section ── */
   .section-header {
     padding: 0 14px 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
   }
 
   .section-title {
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 500;
     color: var(--faint);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
   }
 
-  /* ── Email list ── */
   .email-list {
     padding: 0 14px;
     max-height: 230px;
@@ -167,7 +159,7 @@
     gap: 4px;
   }
 
-  .email-list::-webkit-scrollbar { width: 3px; }
+  .email-list::-webkit-scrollbar { width: 2px; }
   .email-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
 
   .email-card {
@@ -179,7 +171,9 @@
     align-items: center;
     gap: 10px;
     animation: fadeUp .2s ease;
+    transition: border-color .15s;
   }
+  .email-card:hover { border-color: var(--border2); }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(3px); }
@@ -187,10 +181,11 @@
   }
 
   .status-bar {
-    width: 3px;
-    height: 30px;
+    width: 2px;
+    height: 28px;
     border-radius: 2px;
     flex-shrink: 0;
+    opacity: 0.7;
   }
   .bar-rejected  { background: var(--red); }
   .bar-interview { background: var(--blue); }
@@ -209,43 +204,34 @@
 
   .email-subject {
     font-size: 11px;
-    color: var(--muted);
+    color: var(--faint);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
   .email-meta { text-align: right; flex-shrink: 0; }
-
-  .email-date {
-    font-size: 10px;
-    color: var(--faint);
-  }
+  .email-date { font-size: 9.5px; color: var(--faint); }
 
   .status-chip {
-    font-size: 9.5px;
+    font-size: 9px;
     font-weight: 500;
     padding: 2px 6px;
     border-radius: 4px;
     margin-top: 3px;
     display: inline-block;
+    letter-spacing: 0.2px;
   }
 
   .chip-rejected  { background: var(--red-bg);   color: var(--red); }
   .chip-interview { background: var(--blue-bg);  color: var(--blue); }
   .chip-offer     { background: var(--green-bg); color: var(--green); }
-  .chip-ack       { background: var(--gray-bg);  color: var(--muted); }
+  .chip-ack       { background: var(--gray-bg);  color: var(--faint); }
   .chip-unknown   { background: var(--gray-bg);  color: var(--faint); }
 
-  /* ── Empty state ── */
-  .empty {
-    padding: 40px 20px;
-    text-align: center;
-    color: var(--faint);
-  }
-  .empty-icon { font-size: 28px; margin-bottom: 10px; }
-  .empty-text { font-size: 12px; line-height: 1.6; color: var(--muted); }
+  .empty { padding: 40px 20px; text-align: center; }
+  .empty-icon { font-size: 26px; margin-bottom: 10px; opacity: 0.4; }
+  .empty-text { font-size: 12px; line-height: 1.7; color: var(--faint); }
 
-  /* ── Footer ── */
   .footer {
     padding: 12px 14px;
     border-top: 1px solid var(--border);
@@ -272,16 +258,15 @@
     color: #fff;
     border-color: var(--text);
   }
-  .btn-primary:hover { background: #333; }
-  .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-primary:hover { background: #444; }
+  .btn-primary:disabled { opacity: .35; cursor: not-allowed; }
 
   .btn-secondary {
-    background: var(--surface);
-    color: var(--muted);
+    background: transparent;
+    color: var(--faint);
   }
-  .btn-secondary:hover { background: var(--bg); color: var(--red); border-color: #fca5a5; }
+  .btn-secondary:hover { background: var(--bg); color: var(--red); border-color: #e8b8b5; }
 
-  /* ── Settings ── */
   #settings-panel {
     display: none;
     padding: 16px 14px;
@@ -289,7 +274,7 @@
   }
 
   .settings-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text);
     margin-bottom: 14px;
@@ -300,13 +285,13 @@
     display: block;
     font-size: 11px;
     font-weight: 500;
-    color: var(--muted);
+    color: var(--faint);
     margin-bottom: 5px;
   }
   .field input {
     width: 100%;
     padding: 7px 10px;
-    background: var(--surface);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 6px;
     color: var(--text);
@@ -315,41 +300,11 @@
     outline: none;
     transition: border-color .15s;
   }
-  .field input:focus { border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
+  .field input:focus { border-color: #b8d0e8; box-shadow: 0 0 0 3px rgba(74,122,181,0.07); }
   .field input::placeholder { color: var(--faint); }
 
   .field-row { display: flex; gap: 8px; }
   .field-row .field { flex: 1; }
-
-  /* ── Theme toggle ── */
-  .theme-toggle {
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .theme-label {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--muted);
-  }
-
-  .theme-btn {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 5px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--muted);
-    cursor: pointer;
-    transition: all .15s;
-    font-family: inherit;
-  }
-  .theme-btn:hover { border-color: var(--border2); color: var(--text); }
 
   .save-msg {
     font-size: 11px;
@@ -372,7 +327,7 @@
   </div>
   <div class="header-actions">
     <button class="btn-icon" id="settings-btn" title="Settings">⚙</button>
-    <button class="btn-icon" id="export-btn" title="Export CSV">↓</button>
+    <button class="btn-icon" id="export-btn" title="Export CSV">Export CSV</button>
   </div>
 </div>
 
@@ -380,7 +335,6 @@
   ⚠ Proxy offline — run <code>node proxy/server.js</code>
 </div>
 
-<!-- ── Dashboard ── -->
 <div id="dashboard">
   <div class="stats">
     <div class="stat total active" data-filter="all">
@@ -418,7 +372,6 @@
   </div>
 </div>
 
-<!-- ── Settings ── -->
 <div id="settings-panel">
   <div class="settings-title">Settings</div>
 
@@ -445,11 +398,6 @@
     <input type="password" id="cfg-pass" placeholder="••••••••••••••••" />
   </div>
 
-  <div class="theme-toggle">
-    <span class="theme-label">Switch to dark theme</span>
-    <button class="theme-btn" id="theme-switch-btn">Switch →</button>
-  </div>
-
   <div class="save-msg" id="save-msg"></div>
 
   <div class="footer" style="margin-top: 10px; padding: 0; background: transparent; border: none;">
@@ -459,6 +407,5 @@
 </div>
 
 <script src="popup.js"></script>
-
 </body>
 </html>
